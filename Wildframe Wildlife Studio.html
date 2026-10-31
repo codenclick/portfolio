@@ -1,0 +1,546 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Wildframe Wildlife Studio</title>
+<style>
+/* Layout: editorial single column, uniform 3:2 photo grid with filters and a lightbox. */
+:root {
+  --bg: #0c1110;
+  --surface: #151d1a;
+  --fg: #ece6d6;
+  --muted: #98a396;
+  --accent: #e2a94b;
+  --line: rgba(236, 230, 214, 0.12);
+  --display: "Fraunces", Georgia, serif;
+  --body: "Figtree", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+  overflow-x: hidden;
+}
+img { max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.wrap { max-width: 1200px; margin: 0 auto; }
+.eyebrow {
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
+p { margin: 0; max-width: 60ch; }
+.sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Nav: sticky, translucent, gains a hairline once the page scrolls */
+.site-head {
+  position: sticky; top: 0; z-index: 20;
+  margin-inline: -16px; padding-inline: 16px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  transition: box-shadow 0.3s ease;
+}
+.site-head.scrolled { box-shadow: 0 1px 0 var(--line); }
+nav {
+  display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
+  justify-content: space-between; padding-block: 18px;
+}
+.logo { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.logo span { color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 0 20px; font-size: 14px; color: var(--muted); }
+.links a { display: inline-flex; align-items: center; min-height: 44px; transition: color 0.2s ease; }
+.links a:hover { color: var(--fg); }
+
+/* Hero */
+.hero {
+  display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px;
+  align-items: center; padding-block: 56px 72px;
+}
+.hero h1 { font-size: clamp(42px, 7vw, 84px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 16px; }
+.hero h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero .lede { margin-top: 24px; font-size: 18px; color: var(--muted); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  padding: 14px 24px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 15px;
+  border: 1px solid var(--line); cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.btn.primary { background: var(--accent); color: #1a1408; border-color: transparent; }
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hero-frame {
+  margin: 0; position: relative; overflow: hidden;
+  aspect-ratio: 4 / 5; max-width: 100%; border-radius: 6px;
+  background:
+    radial-gradient(ellipse 30% 22% at 58% 46%, #e9a24e 0 45%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 110%, #1d2a1c, transparent 70%),
+    linear-gradient(170deg, #5b6b4f 0%, #2a3527 55%, #0d130f 100%);
+}
+.hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.caption {
+  position: absolute; left: 14px; bottom: 14px; right: 14px; z-index: 1;
+  display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+  font-size: 12px; color: #f3eee0; background: rgba(12, 17, 16, 0.6);
+  backdrop-filter: blur(6px); padding: 8px 12px; border-radius: 4px;
+}
+
+/* Species strip */
+.strip {
+  border-block: 1px solid var(--line); padding-block: 18px; overflow: hidden;
+  font-family: var(--display); font-size: 22px; color: var(--muted);
+}
+.strip p { max-width: none; white-space: nowrap; }
+.strip b { font-weight: 400; color: var(--accent); margin-inline: 14px; }
+
+/* Sections */
+section { padding-block: 96px 0; }
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 28px; }
+.section-head h2 { font-size: clamp(32px, 4.5vw, 52px); letter-spacing: -0.01em; margin-top: 10px; }
+.section-head a { color: var(--accent); font-weight: 600; font-size: 15px; display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Filters */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.chip {
+  min-height: 44px; padding: 10px 20px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  font: inherit; font-size: 14px; cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.chip:hover { color: var(--fg); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: transparent; color: #1a1408; font-weight: 600; }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Gallery: masonry columns. Landscape photos are 3:2, portrait photos 4:5, both cropped with object-fit */
+.gallery { columns: 300px; column-gap: 14px; }
+.frame {
+  position: relative; display: block; width: 100%; aspect-ratio: 3 / 2; margin: 0 0 14px;
+  break-inside: avoid-column;
+  padding: 0; border: 0; border-radius: 6px; overflow: hidden; cursor: zoom-in;
+  background: linear-gradient(160deg, #2c3b30, #101712); color: inherit; font: inherit; text-align: left;
+}
+.frame.portrait { aspect-ratio: 4 / 5; }
+.frame[hidden] { display: none; }
+.frame:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.frame img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.frame:hover img { transform: scale(1.04); }
+.frame::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 55%);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.frame:hover::after { opacity: 1; }
+.frame .meta {
+  position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 1; display: block;
+  opacity: 0; transform: translateY(6px); transition: all 0.3s ease;
+}
+.frame:hover .meta, .frame:focus-visible .meta { opacity: 1; transform: none; }
+.frame .meta strong { display: block; font-family: var(--display); font-weight: 500; font-size: 18px; }
+.frame .meta span { font-size: 13px; color: #d9d3c2; }
+
+/* Lightbox (native dialog: Esc, focus trap and focus return come built in) */
+.lb {
+  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0; background: rgba(6, 9, 8, 0.94); color: var(--fg);
+}
+.lb[open] {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 64px 72px 24px;
+}
+.lb figure { margin: 0; display: grid; gap: 14px; justify-items: center; max-width: 100%; }
+.lb img { max-width: 100%; max-height: 74dvh; object-fit: contain; border-radius: 4px; }
+.lb figcaption { font-size: 14px; color: var(--muted); text-align: center; }
+.lb figcaption strong { font-family: var(--display); font-weight: 500; font-size: 18px; color: var(--fg); margin-right: 10px; }
+.lb-btn {
+  position: absolute; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+  font: inherit; font-size: 22px; line-height: 1;
+  transition: background 0.2s ease;
+}
+.lb-btn:hover { background: #22302a; }
+.lb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.lb-close { top: 16px; right: 16px; }
+.lb-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+/* Story */
+.story {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start;
+  background: var(--surface); border-radius: 8px; padding: clamp(24px, 4vw, 56px); margin-top: 96px;
+}
+.story h2 { font-size: clamp(28px, 3.6vw, 42px); }
+.story dl { margin: 0; display: grid; gap: 18px; }
+.story dt { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.story dd { margin: 2px 0 0; color: var(--fg); }
+
+/* Calendar spotlight */
+.spot {
+  display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center;
+  border: 1px solid var(--line); border-radius: 8px; padding: clamp(24px, 4vw, 56px);
+}
+.cover {
+  aspect-ratio: 24 / 17; width: 100%; border-radius: 4px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
+  background: radial-gradient(ellipse 25% 18% at 70% 55%, #e9a24e 0 50%, transparent 72%), linear-gradient(165deg, #3f5440, #0b120d);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+}
+.cover .y { font-family: var(--display); font-size: clamp(34px, 5vw, 56px); line-height: 1; }
+.cover small { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #efe9d9; }
+.grid-cal {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 14px; font-size: 11px; text-align: center; color: #cfc9b8;
+}
+.grid-cal i { font-style: normal; padding: 3px 0; border-radius: 3px; }
+.grid-cal .hi { background: var(--accent); color: #1a1408; font-weight: 700; }
+.spot h2 { font-size: clamp(32px, 4vw, 48px); margin-top: 12px; }
+.spot ul { padding-left: 18px; margin: 20px 0 0; color: var(--muted); }
+.spot ul li { margin-bottom: 6px; }
+.price-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 28px; }
+.price { font-family: var(--display); font-size: 32px; }
+.price-row small { color: var(--muted); font-size: 13px; }
+
+/* Newsletter */
+.join {
+  margin-top: 96px; text-align: center; padding-block: 64px; border-top: 1px solid var(--line);
+}
+.join h2 { font-size: clamp(30px, 4.5vw, 50px); margin-inline: auto; }
+.join p { margin: 16px auto 0; color: var(--muted); }
+.form { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+.form input {
+  font: inherit; min-width: 0; flex: 1 1 240px; max-width: 360px; padding: 14px 18px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  border-top: 1px solid var(--line); padding-top: 24px; font-size: 13px; color: var(--muted);
+}
+
+/* Scroll reveal: only hides content when JS is running */
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* Touch screens have no hover, so show photo captions straight away */
+@media (hover: none) {
+  .frame::after { opacity: 1; }
+  .frame .meta { opacity: 1; transform: none; }
+}
+
+@media (max-width: 860px) {
+  .hero, .story, .spot { grid-template-columns: 1fr; }
+  .hero-frame { aspect-ratio: 4 / 4.2; }
+  .lb[open] { padding: 64px 12px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+  .js .reveal { opacity: 1; transform: none; }
+}
+</style>
+
+<header class="site-head">
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="#">Life in the Wild<span> By Deepak Yadav</span></a>
+      <div class="links">
+        <a href="#gallery">Gallery</a>
+        <a href="#species">Species</a>
+        <a href="#calendar">Calendar 2027</a>
+        <a href="#about">About</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Wildlife photography · India</p>
+      <h1>Wild India, <em>one frame</em> at a time.</h1>
+      <p class="lede">Tigers, birds and forest light, photographed on patient, unhurried field days across India's reserves.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#calendar">Get the 2027 calendar</a>
+        <a class="btn" href="#gallery">View the gallery</a>
+      </div>
+    </div>
+    <figure class="hero-frame">
+      <img src="images/hero-bengal-tiger.jpg" alt="Bengal tiger at dusk in Ranthambore" width="1500" height="1875" decoding="async" onerror="this.remove()">
+      <figcaption class="caption"><span>Bengal tiger, dusk</span><span>Ranthambore · 2026</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="strip" aria-label="Featured species">
+    <p>Bengal Tiger <b>✦</b> Indian Peafowl <b>✦</b> Painted Stork <b>✦</b> Asian Elephant <b>✦</b> Sloth Bear <b>✦</b> Indian Roller</p>
+  </div>
+
+  <section id="gallery">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2>The field, frame by frame</h2>
+      </div>
+      <a href="#">Full archive →</a>
+    </div>
+
+    <div class="filters" id="filters" role="group" aria-label="Filter photographs"></div>
+
+    <div class="gallery" id="gallery-grid"></div>
+
+    <div class="story reveal">
+      <div>
+        <p class="eyebrow">Behind the shot</p>
+        <h2>Four hours in the grass for eleven seconds.</h2>
+      </div>
+      <dl>
+        <div><dt>The wait</dt><dd>Two hours before the tiger crossed the dry riverbed, at the exact spot the guide had marked.</dd></div>
+        <div><dt>The gear</dt><dd>A long lens on a beanbag, shot at 1/1000 s to freeze the heat shimmer.</dd></div>
+        <div><dt>What went wrong</dt><dd>The first sequence was out of focus. The second, taken in the same spot, is the one above.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="species">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Species index</p>
+        <h2>Know what you're looking at</h2>
+      </div>
+      <a href="#">Browse all species →</a>
+    </div>
+    <div class="story reveal" style="margin-top:0;grid-template-columns:1fr 1fr;">
+      <dl>
+        <div><dt>Bengal tiger</dt><dd>Panthera tigris tigris · Ranthambore, Bandhavgarh, Tadoba</dd></div>
+        <div><dt>Painted stork</dt><dd>Mycteria leucocephala · Bharatpur, Ranganathittu</dd></div>
+      </dl>
+      <dl>
+        <div><dt>Asian elephant</dt><dd>Elephas maximus indicus · Nagarhole, Periyar</dd></div>
+        <div><dt>Indian roller</dt><dd>Coracias benghalensis · Velavadar, Yala</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="calendar">
+    <div class="spot reveal">
+      <div class="cover" role="img" aria-label="Calendar 2027 cover placeholder">
+        <small>Wildframe · Calendar</small>
+        <div>
+          <div class="y">2027</div>
+          <div class="grid-cal" aria-hidden="true">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+            <i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>10</i>
+            <i>11</i><i>12</i><i>13</i><i class="hi">14</i><i>15</i><i>16</i><i>17</i>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">New for 2027</p>
+        <h2>Calendar 2027: twelve of the year's best frames.</h2>
+        <p style="margin-top:18px;color:var(--muted)">A table calendar with one wild month per page, printed on heavy stock and sized to sit beside your desk.</p>
+        <ul>
+          <li>12 photographs from 2026 field seasons</li>
+          <li>24 × 17 cm landscape, one month per page</li>
+          <li>Monday start, with species notes on each page</li>
+        </ul>
+        <div class="price-row">
+          <span class="price">₹ 899</span>
+          <a class="btn primary" href="#">Reserve your copy</a>
+          <small>Limited first print run</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join reveal" id="about">
+    <p class="eyebrow">Free download</p>
+    <h2>Get the desktop wallpaper pack</h2>
+    <p>Six field photographs, free. New frames each season.</p>
+    <form class="form" onsubmit="event.preventDefault()">
+      <label for="email" class="sr">Email address</label>
+      <input id="email" type="email" placeholder="you@email.com" required>
+      <button class="btn primary" type="submit">Send me the pack</button>
+    </form>
+  </section>
+</main>
+
+<dialog class="lb" id="lightbox" aria-label="Photograph viewer">
+  <button type="button" class="lb-btn lb-close" aria-label="Close">×</button>
+  <button type="button" class="lb-btn lb-prev" aria-label="Previous photograph">‹</button>
+  <figure>
+    <img id="lb-img" alt="">
+    <figcaption id="lb-cap"></figcaption>
+  </figure>
+  <button type="button" class="lb-btn lb-next" aria-label="Next photograph">›</button>
+</dialog>
+
+<footer class="wrap">
+  <span>© 2026 Wildframe. Sample design.</span>
+  <span>Instagram · Shop · Contact</span>
+</footer>
+
+<script>
+(function () {
+  document.documentElement.classList.add('js');
+
+  // ===== PHOTO LIST: add, replace or remove photos here =====
+  // file:     name of the image inside the images/ folder (e.g. 'bengal-tiger.jpg')
+  // alt:      description for screen readers
+  // title:    name shown on the photo
+  // place:    location and note shown under the title
+  // category: one of the ids in CATEGORIES below
+  // To replace a photo, save the new image with the same file name in images/.
+  // Portrait or landscape is detected from the image itself, so no size setting is needed.
+  var PHOTOS = [
+    { file: 'bengal-tiger.jpg', alt: 'Bengal tiger in golden light, Ranthambore', title: 'Bengal tiger', place: 'Ranthambore · Golden hour', category: 'mammals' },
+    { file: 'painted-stork.jpg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Painted stork', place: 'Bharatpur · Monsoon', category: 'birds' },
+    { file: 'sloth-bear.jpg', alt: 'Sloth bear foraging in dry forest, Satpura', title: 'Sloth bear', place: 'Satpura · Dry season', category: 'mammals' },
+    { file: 'indian-roller.jpg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Indian roller', place: 'Velavadar · Mid-morning', category: 'birds' },
+    { file: 'asian-elephant.jpg', alt: 'Asian elephant in morning mist, Nagarhole', title: 'Asian elephant', place: 'Nagarhole · Dawn mist', category: 'mammals' },
+    { file: 'pench-landscape.jpg', alt: 'Forest landscape at first light, Pench', title: 'Pench at first light', place: 'Pench · Landscape', category: 'landscape' },
+    { file: 'indian-peafowl.jpg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'birds' }
+  ];
+
+  // Filter buttons are built from this list. "All" is added automatically.
+  var CATEGORIES = [
+    { id: 'mammals', label: 'Mammals' },
+    { id: 'birds', label: 'Birds' },
+    { id: 'landscape', label: 'Landscape' }
+  ];
+
+  var header = document.querySelector('.site-head');
+  function onScroll() { header.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Build the filter buttons and photo tiles from the lists above
+  var filters = document.getElementById('filters');
+  var gallery = document.getElementById('gallery-grid');
+
+  function addChip(label, value, pressed) {
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.setAttribute('data-filter', value);
+    chip.setAttribute('aria-pressed', String(pressed));
+    chip.textContent = label;
+    filters.append(chip);
+  }
+  addChip('All', 'all', true);
+  CATEGORIES.forEach(function (c) { addChip(c.label, c.id, false); });
+
+  PHOTOS.forEach(function (p) {
+    var src = 'images/' + p.file;
+    var frame = document.createElement('button');
+    frame.type = 'button';
+    frame.className = 'frame reveal';
+    frame.setAttribute('data-cat', p.category);
+    frame.setAttribute('data-src', src);
+    frame.setAttribute('data-alt', p.alt);
+    frame.setAttribute('aria-label', p.title + ', ' + p.place);
+
+    var img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = p.alt;
+    // Orientation comes from the real image, so any new photo gets the right frame
+    img.addEventListener('load', function () {
+      if (img.naturalHeight > img.naturalWidth) frame.classList.add('portrait');
+    });
+    // A missing file leaves the placeholder colour showing
+    img.addEventListener('error', function () { img.remove(); });
+    img.src = src;
+
+    var meta = document.createElement('span');
+    meta.className = 'meta';
+    var title = document.createElement('strong');
+    title.textContent = p.title;
+    var place = document.createElement('span');
+    place.textContent = p.place;
+    meta.append(title, place);
+
+    frame.append(img, meta);
+    gallery.append(frame);
+  });
+
+  // Category filters
+  var chips = filters.querySelectorAll('.chip');
+  var frames = Array.prototype.slice.call(gallery.querySelectorAll('.frame'));
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      var cat = chip.getAttribute('data-filter');
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+      frames.forEach(function (f) {
+        f.hidden = cat !== 'all' && f.getAttribute('data-cat') !== cat;
+      });
+    });
+  });
+
+  // Scroll reveal
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  // Lightbox
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCap = document.getElementById('lb-cap');
+  var current = 0;
+
+  function visible() { return frames.filter(function (f) { return !f.hidden; }); }
+
+  function show(index) {
+    var list = visible();
+    current = (index + list.length) % list.length;
+    var frame = list[current];
+    lbImg.src = frame.getAttribute('data-src');
+    lbImg.alt = frame.getAttribute('data-alt');
+    lbCap.innerHTML = '';
+    var title = document.createElement('strong');
+    title.textContent = frame.querySelector('.meta strong').textContent;
+    var place = document.createElement('span');
+    place.textContent = frame.querySelector('.meta > span').textContent;
+    lbCap.append(title, place);
+  }
+
+  frames.forEach(function (frame) {
+    frame.addEventListener('click', function () {
+      var index = visible().indexOf(frame);
+      show(index);
+      lb.showModal();
+    });
+  });
+
+  document.querySelector('.lb-prev').addEventListener('click', function () { show(current - 1); });
+  document.querySelector('.lb-next').addEventListener('click', function () { show(current + 1); });
+  document.querySelector('.lb-close').addEventListener('click', function () { lb.close(); });
+
+  // Click on the dark area outside the photo closes the viewer
+  lb.addEventListener('click', function (e) { if (e.target === lb) lb.close(); });
+
+  lb.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); show(current + 1); }
+  });
+})();
+</script>
+
+</body></html>
