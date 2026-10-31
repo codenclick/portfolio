@@ -277,14 +277,14 @@ footer {
       </div>
     </div>
     <figure class="hero-frame">
-      <img src="images/hero-bengal-tiger.jpg" alt="Bengal tiger at dusk in Ranthambore" width="1500" height="1875" decoding="async" onerror="this.remove()">
-      <figcaption class="caption"><span>Bengal tiger, dusk</span><span>Ranthambore · 2026</span></figcaption>
+      <img src="images/bengal-tiger.jpeg" alt="Bengal tiger at dusk in Ranthambore" width="1500" height="1875" decoding="async" onerror="this.remove()">
+      <figcaption class="caption"><span>Bengal tiger, Head On</span><span>Panna · 2026</span></figcaption>
     </figure>
   </div>
 
-  <div class="strip" aria-label="Featured species">
+  <!-- <div class="strip" aria-label="Featured species">
     <p>Bengal Tiger <b>✦</b> Indian Peafowl <b>✦</b> Painted Stork <b>✦</b> Asian Elephant <b>✦</b> Sloth Bear <b>✦</b> Indian Roller</p>
-  </div>
+  </div> -->
 
   <section id="gallery">
     <div class="section-head reveal">
@@ -347,7 +347,7 @@ footer {
       </div>
       <div>
         <p class="eyebrow">New for 2027</p>
-        <h2>Calendar 2027: twelve of the year's best frames.</h2>
+        <h2>Wildlife Calendar 2027: twelve of the year's best frames.</h2>
         <p style="margin-top:18px;color:var(--muted)">A table calendar with one wild month per page, printed on heavy stock and sized to sit beside your desk.</p>
         <ul>
           <li>12 photographs from 2026 field seasons</li>
@@ -403,20 +403,22 @@ footer {
   // To replace a photo, save the new image with the same file name in images/.
   // Portrait or landscape is detected from the image itself, so no size setting is needed.
   var PHOTOS = [
-    { file: 'bengal-tiger.jpg', alt: 'Bengal tiger in golden light, Ranthambore', title: 'Bengal tiger', place: 'Ranthambore · Golden hour', category: 'mammals' },
-    { file: 'painted-stork.jpg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Painted stork', place: 'Bharatpur · Monsoon', category: 'birds' },
-    { file: 'sloth-bear.jpg', alt: 'Sloth bear foraging in dry forest, Satpura', title: 'Sloth bear', place: 'Satpura · Dry season', category: 'mammals' },
-    { file: 'indian-roller.jpg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Indian roller', place: 'Velavadar · Mid-morning', category: 'birds' },
-    { file: 'asian-elephant.jpg', alt: 'Asian elephant in morning mist, Nagarhole', title: 'Asian elephant', place: 'Nagarhole · Dawn mist', category: 'mammals' },
-    { file: 'pench-landscape.jpg', alt: 'Forest landscape at first light, Pench', title: 'Pench at first light', place: 'Pench · Landscape', category: 'landscape' },
-    { file: 'indian-peafowl.jpg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'birds' }
+    { file: 'bengal-tiger.jpeg', alt: 'Bengal tiger in golden light, Ranthambore', title: 'Bengal tiger', place: 'Ranthambore · Golden hour', category: 'mammals' },
+    { file: 'squirrel.jpeg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Painted stork', place: 'Bharatpur · Monsoon', category: 'mammals' },
+    { file: 'drongo.jpeg', alt: 'Sloth bear foraging in dry forest, Satpura', title: 'Sloth bear', place: 'Satpura · Dry season', category: 'birds' },
+    { file: 'dog_tail.jpeg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Indian roller', place: 'Velavadar · Mid-morning', category: 'Golden Hour' },
+    { file: 'cormorant.jpeg', alt: 'Asian elephant in morning mist, Nagarhole', title: 'Asian elephant', place: 'Nagarhole · Dawn mist', category: 'birds' },
+    { file: 'owl.jpeg', alt: 'Forest landscape at first light, Pench', title: 'Pench at first light', place: 'Pench · Landscape', category: 'birds' },
+    { file: 'sunrise.jpeg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'Golden Hour' },
+    { file: 'squirrel_jump.jpeg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'mammals' }
+
   ];
 
   // Filter buttons are built from this list. "All" is added automatically.
   var CATEGORIES = [
     { id: 'mammals', label: 'Mammals' },
     { id: 'birds', label: 'Birds' },
-    { id: 'landscape', label: 'Landscape' }
+    { id: 'Golden Hour', label: 'Golden Hour' }
   ];
 
   var header = document.querySelector('.site-head');

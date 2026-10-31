@@ -45,3 +45,8 @@ NOTES
 - Until a file exists, the coloured placeholder shows in its place, so nothing breaks.
 - The list works when you open the HTML file directly. No server or internet connection is needed.
 - Keep file names in lowercase, with hyphens instead of spaces (for example: sloth-bear.jpg).
+
+
+google form link
+
+https://docs.google.com/forms/d/e/1FAIpQLSe64XQRijX0vOI2mbl7QeCM4xhvbYpx7JKnjBWHs6sTG86Nog/viewform?usp=publish-editor
