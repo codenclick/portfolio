@@ -484,7 +484,7 @@ footer {
       <ul>
         <li>Email: dpkydv0102@gmail.com</li>
         <li>Phone: +91 8882912305</li>
-        <li>Instagram: <a href="https://www.instagram.com/codenclickwildlife/" target="_blank" rel="noopener">@code_n_click.wildlife</a></li>
+        <li>Instagram: <a href="https://www.instagram.com/code_n_click.wildlife/" target="_blank" rel="noopener">@code_n_click.wildlife</a></li>
       </ul>
     </div>
   </section>
@@ -530,7 +530,7 @@ footer {
   // Portrait or landscape is detected from the image itself, so no size setting is needed.
   var PHOTOS = [
     { file: 'bengal-tiger.jpeg', alt: 'Bengal Tiger', title: 'Head on With Bengal tiger', place: 'Panna', category: 'mammals' },
-    { file: 'black_stilt.jpeg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Morning Grooming', place: 'Sambhar', category: 'Golden Hour' },
+    { file: 'black_stilt.jpeg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Morning Grooming', place: 'Sambhar', category: 'birds' },
     { file: 'drongo.jpeg', alt: 'Drongo', title: 'Drongo amidst morning light', place: 'Mohdinpur', category: 'birds' },
     { file: 'dog_tail.jpeg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Golden Tail', place: 'Mohdinpur', category: 'Golden Hour' },
     { file: 'darter.jpeg', alt: 'Darter with its catch', title: 'Darter with its catch', place: 'Bharatpur', category: 'birds' },
@@ -672,13 +672,13 @@ footer {
 })();
 </script>
 
-<script>
+<!-- <script>
 // Sample 3D calendar: each leaf has a photo on the front and a month grid on the back
 (function () {
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   // Sample photos until the real calendar pages are added
-  var PHOTOS = ['jan.jpeg', 'feb.jpeg', 'mar.jpeg', 'apr.jpeg', 'may.jpeg', 'jun.jpeg',
-    'jul.jpeg', 'aug.jpeg', 'sep.jpeg', 'oct.jpeg', 'nov.jpeg', 'dec.jpeg'];
+  var PHOTOS = ['cover.jpeg','jan.jpeg', 'feb.jpeg', 'mar.jpeg', 'apr.jpeg', 'may.jpeg', 'jun.jpeg',
+    'jul.jpeg', 'aug.jpeg', 'sep.jpeg', 'oct.jpeg', 'nov.jpeg', 'dec.jpeg','hol.jpeg','abt.jpeg'];
   var YEAR = 2027;
   var COUNT = MONTHS.length;
 
@@ -706,10 +706,13 @@ footer {
     for (var k = 0; k < COUNT; k++) {
       var leaf = document.createElement('div');
       leaf.className = 'leaf';
+      // leaf.innerHTML =
+      //   '<div class="face front"><img src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph">' +
+      //   '<div class="month-overlay"><h3>' + MONTHS[k] + ' ' + YEAR + '</h3>' + gridHTML(k) + '</div></div>' +
+      //   '<div class="face back"></div>';
       leaf.innerHTML =
-        '<div class="face front"><img src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph">' +
-        '<div class="month-overlay"><h3>' + MONTHS[k] + ' ' + YEAR + '</h3>' + gridHTML(k) + '</div></div>' +
-        '<div class="face back"></div>';
+  '<div class="face front"><img src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph"></div>' +
+  '<div class="face back"></div>';
       book.appendChild(leaf);
       leaves.push(leaf);
     }
@@ -769,7 +772,109 @@ footer {
 
   build();
 })();
-</script>
+</script> -->
+
+<script>
+  // Sample 3D calendar: pages are listed in order, and each label comes from this list
+  (function () {
+    // ===== PAGE LIST: one entry per page, in turning order =====
+    // file:  photo inside images/web/
+    // label: text shown under the calendar when this page is on top
+    var PAGES = [
+      { file: 'cover.jpeg',    label: 'Cover' },
+      { file: 'jan.jpeg',      label: 'January 2027' },
+      { file: 'feb.jpeg',      label: 'February 2027' },
+      { file: 'mar.jpeg',      label: 'March 2027' },
+      { file: 'apr.jpeg',      label: 'April 2027' },
+      { file: 'may.jpeg',      label: 'May 2027' },
+      { file: 'jun.jpeg',      label: 'June 2027' },
+      { file: 'jul.jpeg',      label: 'July 2027' },
+      { file: 'aug.jpeg',      label: 'August 2027' },
+      { file: 'sep.jpeg',      label: 'September 2027' },
+      { file: 'oct.jpeg',      label: 'October 2027' },
+      { file: 'nov.jpeg',      label: 'November 2027' },
+      { file: 'dec.jpeg',      label: 'December 2027' },
+      { file: 'hol.jpeg',  label: 'Holiday' },
+      { file: 'abt.jpeg', label: 'About Me' }
+    ];
+  
+    var COUNT = PAGES.length;
+    var stage = document.getElementById('cal3d-stage');
+    var book = document.getElementById('cal3d-book');
+    var label = document.getElementById('cal3d-label');
+    var prev = document.getElementById('cal3d-prev');
+    var next = document.getElementById('cal3d-next');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var leaves = [];
+    var idx = 0; // number of leaves turned over; the page on top is PAGES[idx]
+  
+    function build() {
+      book.innerHTML = '';
+      PAGES.forEach(function (page) {
+        var leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        leaf.innerHTML =
+          '<div class="face front"><img src="images/web/' + page.file + '" alt="' + page.label + ' page"></div>' +
+          '<div class="face back"></div>';
+        book.appendChild(leaf);
+        leaves.push(leaf);
+      });
+      render();
+    }
+  
+    function render() {
+      leaves.forEach(function (leaf, k) {
+        var turned = k < idx;
+        leaf.classList.toggle('turned', turned);
+        leaf.style.transform = turned
+          ? 'translateZ(' + (k * 0.5) + 'px) rotateX(-180deg)'
+          : 'translateZ(' + ((COUNT - k) * 0.5) + 'px)';
+      });
+      label.textContent = PAGES[idx].label;
+      prev.disabled = idx === 0;
+      next.disabled = idx === COUNT - 1;
+    }
+  
+    function go(step) {
+      idx = Math.max(0, Math.min(COUNT - 1, idx + step));
+      render();
+    }
+  
+    prev.addEventListener('click', function () { go(-1); });
+    next.addEventListener('click', function () { go(1); });
+  
+    // Tap or click the left half to go back, the right half to go forward
+    stage.addEventListener('click', function (e) {
+      var r = stage.getBoundingClientRect();
+      go(e.clientX > r.left + r.width / 2 ? 1 : -1);
+    });
+  
+    // The book tilts toward the cursor
+    if (!reduceMotion) {
+      var frame = null;
+      stage.addEventListener('mousemove', function (e) {
+        if (frame) return;
+        var clientX = e.clientX;
+        var clientY = e.clientY;
+        frame = requestAnimationFrame(function () {
+          frame = null;
+          var r = stage.getBoundingClientRect();
+          var x = (clientX - r.left) / r.width - 0.5;
+          var y = (clientY - r.top) / r.height - 0.5;
+          book.style.transform = 'rotateX(' + (6 - y * 12) + 'deg) rotateY(' + (-8 + x * 16) + 'deg)';
+        });
+      });
+      stage.addEventListener('mouseleave', function () {
+        if (frame) cancelAnimationFrame(frame);
+        frame = null;
+        book.style.transform = '';
+      });
+    }
+  
+    build();
+  })();
+  </script>
+
 <script>
 // Loader: waits for the page and the heavy photos, with a minimum display time and a timeout
 (function () {
