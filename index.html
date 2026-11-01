@@ -50,9 +50,18 @@ p { margin: 0; max-width: 60ch; }
   transition: box-shadow 0.3s ease;
 }
 .site-head.scrolled { box-shadow: 0 1px 0 var(--line); }
-nav {
-  display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
-  justify-content: space-between; padding-block: 18px;
+/* Logo on the left; the links spread evenly across the rest of the bar */
+nav { display: flex; align-items: center; gap: 32px; padding-block: 22px; }
+.logo { flex: 0 0 auto; font-size: 26px; }
+.links {
+  flex: 1; display: flex; justify-content: center; align-items: center; gap: 24px;
+  font-size: 17px; color: var(--muted);
+}
+.links a { min-height: 44px; padding-inline: 8px; }
+@media (max-width: 760px) {
+  nav { flex-direction: column; gap: 14px; text-align: center; }
+  .logo { font-size: 22px; }
+  .links { flex: none; width: 100%; justify-content: space-evenly; font-size: 15px; }
 }
 .logo { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
 .logo span { color: var(--accent); }
@@ -273,6 +282,8 @@ html.loading { overflow: hidden; }
 .cal3d-controls .btn { min-width: 44px; }
 .cal3d-controls .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 .cal3d-label { font-family: var(--display); font-size: 20px; min-width: 12ch; text-align: center; }
+.cal-note { margin: 0; max-width: 56ch; font-size: 13px; line-height: 1.5; color: var(--muted); text-align: center; }
+.cal-note strong { color: var(--accent); font-weight: 600; }
 .spot h2 { font-size: clamp(32px, 4vw, 48px); margin-top: 12px; }
 .spot ul { padding-left: 18px; margin: 20px 0 0; color: var(--muted); }
 .spot ul li { margin-bottom: 6px; }
@@ -443,7 +454,7 @@ footer {
           <div class="cal3d-binding" aria-hidden="true"></div>
           <div class="cal3d-book" id="cal3d-book">
             <!-- Shown without JavaScript: the first month's photo -->
-            <img src="images/web/jan.jpg" alt="Wildlife Calendar 2027, January photograph">
+            <img src="images/web/jan.jpeg" alt="Wildlife Calendar 2027, January photograph">
           </div>
         </div>
         <div class="cal3d-controls">
@@ -451,6 +462,7 @@ footer {
           <span class="cal3d-label" id="cal3d-label" aria-live="polite">January 2027</span>
           <button class="btn primary" type="button" id="cal3d-next" aria-label="Next month">›</button>
         </div>
+        <p class="cal-note"><strong>Note:</strong> Nature works at its own pace. Just give the next page a moment to Load...</p>
       </div>
       <div>
         <p class="eyebrow">New for 2027</p>
@@ -464,7 +476,7 @@ footer {
         <div class="price-row">
           <span class="price">₹ 499</span>
           <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe64XQRijX0vOI2mbl7QeCM4xhvbYpx7JKnjBWHs6sTG86Nog/viewform" target="_blank" rel="noopener">Reserve your copy</a>
-          <small>Limited first print run</small>
+          <small>First 20 orders gets Signed Copy</small>
         </div>
         <p class="reserve-note">No payment now. Reserving sends you a confirmation email with payment and delivery details.</p>
       </div>
@@ -707,7 +719,7 @@ footer {
       var leaf = document.createElement('div');
       leaf.className = 'leaf';
       leaf.innerHTML =
-        '<div class="face front"><img src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph">' +
+        '<div class="face front"><img data-src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph" decoding="async">' +
         '<div class="month-overlay"><h3>' + MONTHS[k] + ' ' + YEAR + '</h3>' + gridHTML(k) + '</div></div>' +
         '<div class="face back"></div>';
       book.appendChild(leaf);
@@ -720,6 +732,11 @@ footer {
     leaves.forEach(function (leaf, k) {
       var turned = k < idx;
       leaf.classList.toggle('turned', turned);
+      // Only the page being turned and its neighbours are rendered; the rest stay out of the 3D scene
+      var near = k >= idx - 1 && k <= idx + 1;
+      leaf.style.display = near ? '' : 'none';
+      var img = leaf.querySelector('img');
+      if (near && !img.getAttribute('src')) img.src = img.getAttribute('data-src');
       // Small depth offsets keep the leaves from flickering where they overlap
       leaf.style.transform = turned
         ? 'translateZ(' + (k * 0.5) + 'px) rotateX(-180deg)'
@@ -777,9 +794,8 @@ footer {
   var root = document.documentElement;
   root.classList.add('loading');
 
-  var heavy = [
-    'images/web/jan.jpg', 'images/web/feb.jpg', 'images/web/mar.jpg', 'images/web/apr.jpg', 'images/web/may.jpg', 'images/web/jun.jpg',
-    'images/web/jul.jpg', 'images/web/aug.jpg', 'images/web/sep.jpg', 'images/web/oct.jpg', 'images/web/nov.jpg', 'images/web/dec.jpg'];
+  // Only the hero backdrop and the first calendar page block the first paint; the other pages load as the book turns
+  var heavy = ['images/web/sunrise.jpeg', 'images/web/jan.jpeg'];
 
   function preload(src) {
     return new Promise(function (resolve) {
