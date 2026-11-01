@@ -46,8 +46,7 @@ p { margin: 0; max-width: 60ch; }
 .site-head {
   position: sticky; top: 0; z-index: 20;
   margin-inline: -16px; padding-inline: 16px;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  background: linear-gradient(to bottom, rgba(8,11,9,0.9), rgba(8,11,9,0.55));
   transition: box-shadow 0.3s ease;
 }
 .site-head.scrolled { box-shadow: 0 1px 0 var(--line); }
@@ -63,9 +62,25 @@ nav {
 
 /* Hero */
 .hero {
-  display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px;
-  align-items: center; padding-block: 56px 72px;
+  position: relative; color: #f3eee0;
+  width: 100vw; margin-inline: calc(50% - 50vw); height: min(88vh, 820px); min-height: 560px;
 }
+/* Photo fixed behind the whole page; content scrolls over it */
+body { isolation: isolate; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background: linear-gradient(rgba(8,11,9,0.4), rgba(8,11,9,0.8)), url("images/web/sunrise.jpeg") center / cover;
+}
+.hero-copy {
+  position: absolute; z-index: 2; bottom: clamp(48px, 9vh, 96px);
+  left: max(16px, calc((100vw - 1200px) / 2 + 24px)); max-width: min(640px, calc(100vw - 32px));
+}
+.hero .eyebrow { color: var(--accent); }
+.hero h1 { color: #f3eee0; }
+.hero .lede { color: rgba(243,238,224,0.85); }
+.hero .btn { background: rgba(12,17,16,0.35); color: #f3eee0; border-color: rgba(243,238,224,0.45); backdrop-filter: blur(6px); }
+.hero .btn.primary { background: var(--accent); color: #1a1408; border-color: transparent; }
+.hero .caption { z-index: 2; left: auto; right: max(16px, calc((100vw - 1200px) / 2 + 24px)); bottom: 20px; }
 .hero h1 { font-size: clamp(42px, 7vw, 84px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 16px; }
 .hero h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
 .hero .lede { margin-top: 24px; font-size: 18px; color: var(--muted); }
@@ -79,15 +94,6 @@ nav {
 .btn.primary { background: var(--accent); color: #1a1408; border-color: transparent; }
 .btn:hover { transform: translateY(-2px); }
 .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.hero-frame {
-  margin: 0; position: relative; overflow: hidden;
-  aspect-ratio: 4 / 5; max-width: 100%; border-radius: 6px;
-  background:
-    radial-gradient(ellipse 30% 22% at 58% 46%, #e9a24e 0 45%, transparent 70%),
-    radial-gradient(ellipse 80% 60% at 50% 110%, #1d2a1c, transparent 70%),
-    linear-gradient(170deg, #5b6b4f 0%, #2a3527 55%, #0d130f 100%);
-}
-.hero-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .caption {
   position: absolute; left: 14px; bottom: 14px; right: 14px; z-index: 1;
   display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
@@ -192,21 +198,85 @@ section { padding-block: 96px 0; }
   display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center;
   border: 1px solid var(--line); border-radius: 8px; padding: clamp(24px, 4vw, 56px);
 }
-.cover {
-  aspect-ratio: 24 / 17; width: 100%; border-radius: 4px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
-  background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.1) 60%), url("images/bengal-tiger.jpeg") center / cover;
-  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+/* Loader: wildlife icons pulse in turn while the heavy photos load, over a sunrise gradient that matches the hero */
+.loader {
+  position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 26px; color: #f3eee0; transition: opacity 0.6s ease, visibility 0.6s ease;
+  background: radial-gradient(ellipse at 50% 30%, #f2a03d 0%, #c2611f 18%, #5a2a12 45%, #1a0d07 75%, #0a0705 100%);
 }
-.cover .y { font-family: var(--display); font-size: clamp(34px, 5vw, 56px); line-height: 1; }
-.cover small { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #efe9d9; }
-.grid-cal {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 14px; font-size: 11px; text-align: center; color: #cfc9b8;
+.loader.done { opacity: 0; visibility: hidden; }
+.loader-icons { display: flex; gap: 18px; }
+.loader-icons svg { width: 44px; height: 44px; fill: #0d130f; animation: pulse 2s ease-in-out infinite; }
+.loader-icons svg:nth-child(2) { animation-delay: 0.5s; }
+.loader-icons svg:nth-child(3) { animation-delay: 1s; }
+.loader-icons svg:nth-child(4) { animation-delay: 1.5s; }
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0) scale(0.92); }
+  50% { opacity: 1; transform: translateY(-6px) scale(1); }
 }
-.grid-cal i { font-style: normal; padding: 3px 0; border-radius: 3px; }
-.grid-cal .hi { background: var(--accent); color: #1a1408; font-weight: 700; }
+.loader p { margin: 0; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #f3eee0; }
+html.loading { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .loader-icons svg { animation: none; opacity: 1; }
+}
+
+/* Sample 3D calendar: a tilting book whose pages turn over (fronts are photos, backs are month grids) */
+.cal3d { display: grid; gap: 22px; justify-items: center; }
+.cal3d-stage { position: relative; perspective: 1800px; width: 100%; }
+.cal3d-stage::after {
+  content: ""; position: absolute; left: 8%; right: 8%; bottom: -22px; height: 36px; z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 70%);
+}
+.cal3d-book {
+  position: relative; width: 100%; aspect-ratio: 24 / 17; transform-style: preserve-3d;
+  transform: rotateX(6deg) rotateY(-8deg); transition: transform 0.6s ease;
+}
+.cal3d-book > img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+/* Pages hinge at the spiral binding on top and flip upward, like a desk calendar */
+.cal3d-book .leaf {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  transform-origin: center top; transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0.1, 0.2, 1), visibility 0s linear 0s;
+}
+.cal3d-book .leaf.turned { visibility: hidden; transition: transform 0.8s cubic-bezier(0.4, 0.1, 0.2, 1), visibility 0s linear 0.8s; }
+.cal3d-binding {
+  position: absolute; left: 0; right: 0; top: -11px; height: 22px; z-index: 2; pointer-events: none;
+  background: radial-gradient(circle, #e5e5e5 0 2.5px, #3a3a3a 3.5px 4.5px, transparent 5.5px) 0 50% / 18px 22px repeat-x;
+}
+.cal3d-book .face {
+  position: absolute; inset: 0; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.cal3d-book .front { background: #0b120d; border-radius: 6px; }
+.cal3d-book .front img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cal3d-book .back {
+  transform: rotateX(180deg); background: #f3eee0; color: #1a1408;
+  border-radius: 6px; padding: clamp(14px, 2.4vw, 26px); display: flex; flex-direction: column;
+}
+.cal3d-book .back h3 { font-family: var(--display); font-weight: 500; font-size: clamp(20px, 2.6vw, 30px); margin: 0; }
+/* Month details printed over the photo, like a real calendar page */
+/* Transparent text over the bottom third of the photo, with a soft shadow for legibility */
+.cal3d-book .month-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0; top: 66.6%; z-index: 1;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 clamp(12px, 2vw, 22px) clamp(10px, 2vw, 18px); color: #f3eee0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.75);
+}
+.cal3d-book .month-overlay h3 { font-family: var(--display); font-weight: 500; font-size: clamp(15px, 2vw, 22px); margin: 0; color: #f3eee0; }
+.month-overlay .cal-grid { margin-top: 6px; gap: 2px; font-size: 11px; }
+.month-overlay .cal-grid span { font-size: 9px; color: #e6e0cf; }
+.month-overlay .cal-grid i { padding: 2px 0; color: #f3eee0; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: auto; font-size: 13px; text-align: center; }
+.cal-grid span { font-size: 11px; letter-spacing: 0.08em; color: #6b6253; }
+.cal-grid i { font-style: normal; padding: 5px 0; border-radius: 4px; }
+.cal3d-controls { display: flex; align-items: center; gap: 16px; }
+.cal3d-controls .btn { min-width: 44px; }
+.cal3d-controls .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+.cal3d-label { font-family: var(--display); font-size: 20px; min-width: 12ch; text-align: center; }
 .spot h2 { font-size: clamp(32px, 4vw, 48px); margin-top: 12px; }
 .spot ul { padding-left: 18px; margin: 20px 0 0; color: var(--muted); }
 .spot ul li { margin-bottom: 6px; }
+.reserve-note { margin-top: 14px; font-size: 14px; color: var(--muted); }
 .price-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 28px; }
 .price { font-family: var(--display); font-size: 32px; }
 .price-row small { color: var(--muted); font-size: 13px; }
@@ -229,9 +299,9 @@ section { padding-block: 96px 0; }
   display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 64px;
 }
 .about-photo {
-  aspect-ratio: 4 / 5; border-radius: 14px; background: var(--surface); border: 1px dashed var(--line);
-  display: grid; place-items: center; color: var(--muted); font-size: 14px;
+  aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; background: var(--surface);
 }
+.about-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .about h2 { font-size: clamp(30px, 4.5vw, 50px); }
 .about p { margin-top: 16px; color: var(--muted); }
 .about ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 8px; color: var(--fg); }
@@ -256,8 +326,19 @@ footer {
 
 @media (max-width: 860px) {
   .hero, .story, .spot { grid-template-columns: 1fr; }
-  .hero-frame { aspect-ratio: 4 / 4.2; }
+  .hero-copy { left: 16px; right: 16px; bottom: 56px; max-width: none; }
+  .hero .caption { right: 16px; bottom: 16px; }
   .lb[open] { padding: 64px 12px 20px; }
+}
+
+@media (max-width: 640px) {
+  /* Phones: filters scroll sideways, photos sit in a compact square grid, a tap opens the full photo */
+  .filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+  .filters::-webkit-scrollbar { display: none; }
+  .chip { flex: none; min-height: 36px; padding: 6px 14px; font-size: 13px; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .gallery .frame, .gallery .frame.portrait { aspect-ratio: 1 / 1; margin: 0; }
+  .gallery .frame::after, .gallery .frame .meta { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -265,6 +346,17 @@ footer {
   .js .reveal { opacity: 1; transform: none; }
 }
 </style>
+
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <div class="loader-icons" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="16" r="5"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="9" cy="5.5" r="2.2"/><circle cx="15" cy="5.5" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/></svg>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="16" r="5"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="9" cy="5.5" r="2.2"/><circle cx="15" cy="5.5" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/></svg>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="16" r="5"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="9" cy="5.5" r="2.2"/><circle cx="15" cy="5.5" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/></svg>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="16" r="5"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="9" cy="5.5" r="2.2"/><circle cx="15" cy="5.5" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/></svg>
+  </div>
+  <p>Loading the wild…</p>
+</div>
+<noscript><style>.loader { display: none !important; }</style></noscript>
 
 <header class="site-head">
   <div class="wrap">
@@ -281,21 +373,18 @@ footer {
 </header>
 
 <main class="wrap">
-  <div class="hero">
-    <div>
+  <section class="hero">
+    <div class="hero-copy">
       <p class="eyebrow">Wildlife photography · India</p>
       <h1>Wild India, <em>one frame</em> at a time.</h1>
       <p class="lede">Tigers, birds and forest light, photographed on patient, unhurried field days across India's reserves.</p>
       <div class="cta-row">
-        <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe64XQRijX0vOI2mbl7QeCM4xhvbYpx7JKnjBWHs6sTG86Nog/viewform" target="_blank" rel="noopener">Get the 2027 calendar</a>
+        <a class="btn primary" href="#calendar">Get the 2027 Calendar</a>
         <a class="btn" href="#gallery">View the gallery</a>
       </div>
     </div>
-    <figure class="hero-frame">
-      <img src="images/peacock.jpeg" alt="Bengal tiger at dusk in Ranthambore" width="1500" height="1875" decoding="async" onerror="this.remove()">
-      <figcaption class="caption"><span>National Bird crowned by Sunset</span><span>Mohdinpur · 2026</span></figcaption>
-    </figure>
-  </div>
+    <!-- <div class="caption"><span>National Bird crowned by Sunset</span><span>Mohdinpur · 2026</span></div> -->
+  </section>
 
   <!-- <div class="strip" aria-label="Featured species">
     <p>Bengal Tiger <b>✦</b> Indian Peafowl <b>✦</b> Painted Stork <b>✦</b> Asian Elephant <b>✦</b> Sloth Bear <b>✦</b> Indian Roller</p>
@@ -349,15 +438,18 @@ footer {
 
   <section id="calendar">
     <div class="spot reveal">
-      <div class="cover" role="img" aria-label="Wildlife Calendar 2027 cover">
-        <small>Wildlife · Calendar</small>
-        <div>
-          <div class="y">2027</div>
-          <div class="grid-cal" aria-hidden="true">
-            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
-            <i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>10</i>
-            <i>11</i><i>12</i><i>13</i><i class="hi">14</i><i>15</i><i>16</i><i>17</i>
+      <div class="cal3d" id="cal3d">
+        <div class="cal3d-stage" id="cal3d-stage">
+          <div class="cal3d-binding" aria-hidden="true"></div>
+          <div class="cal3d-book" id="cal3d-book">
+            <!-- Shown without JavaScript: the first month's photo -->
+            <img src="images/web/jan.jpg" alt="Wildlife Calendar 2027, January photograph">
           </div>
+        </div>
+        <div class="cal3d-controls">
+          <button class="btn" type="button" id="cal3d-prev" aria-label="Previous month">‹</button>
+          <span class="cal3d-label" id="cal3d-label" aria-live="polite">January 2027</span>
+          <button class="btn primary" type="button" id="cal3d-next" aria-label="Next month">›</button>
         </div>
       </div>
       <div>
@@ -374,22 +466,21 @@ footer {
           <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe64XQRijX0vOI2mbl7QeCM4xhvbYpx7JKnjBWHs6sTG86Nog/viewform" target="_blank" rel="noopener">Reserve your copy</a>
           <small>Limited first print run</small>
         </div>
+        <p class="reserve-note">No payment now. Reserving sends you a confirmation email with payment and delivery details.</p>
       </div>
     </div>
   </section>
 
   <section class="about reveal" id="about">
     <div class="about-photo">
-        <img src="images/about_me.jpeg" alt="Your photo">
+        <img src="images/web/about.jpg" alt="Your photo">
     </div>
     <div>
       <p class="eyebrow">About Me</p>
       <h2>Deepak Yadav</h2>
-      <p>From a small village in Haryana, wildlife photography has taught me patience, observation, and humility. Out in the wild, nothing happens on demand. You wake up early, spend hours waiting, miss countless moments, and sometimes return without a single frame worth keeping.
-        Nature follows its own rules. All I can do is prepare, pay attention, and be ready when a moment finally unfolds.
-        Every photograph in this calendar holds a little piece of that journey. I hope these twelve photographs give you a glimpse of the moments I experience in the wild.
-        Curious about the story behind a photograph? Let's connect and explore what goes into capturing these moments.
-        </p>
+      <p>My journey into wildlife photography has been shaped by patience, curiosity, and a deep appreciation for nature. Growing up in a small village in Haryana, I developed a connection with the natural world that gradually turned into a passion for capturing its untold stories.</p>
+      <p>Wildlife photography has taught me that the best moments cannot be planned or demanded. It takes early mornings, long hours in the field, countless moments of waiting, and sometimes returning home without a single photograph. But that is the beauty of being in the wild. Nature has its own rhythm, and every encounter is a reminder that some things are worth waiting for.</p>
+      <p>For me, photography is not just about capturing an animal in its natural habitat. It is about observing behaviour, understanding moments, and preserving the little details that often go unnoticed. Every frame is a combination of patience, timing, and a little bit of luck.</p>
       <ul>
         <li>Email: dpkydv0102@gmail.com</li>
         <li>Phone: +91 8882912305</li>
@@ -478,7 +569,7 @@ footer {
   CATEGORIES.forEach(function (c) { addChip(c.label, c.id, false); });
 
   PHOTOS.forEach(function (p) {
-    var src = 'images/' + p.file;
+    var src = 'images/web/' + p.file;
     var frame = document.createElement('button');
     frame.type = 'button';
     frame.className = 'frame reveal';
@@ -580,4 +671,137 @@ footer {
 })();
 </script>
 
+<script>
+// Sample 3D calendar: each leaf has a photo on the front and a month grid on the back
+(function () {
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  // Sample photos until the real calendar pages are added
+  var PHOTOS = ['jan.jpg', 'feb.jpg', 'mar.jpg', 'apr.jpg', 'may.jpg', 'jun.jpg',
+    'jul.jpg', 'aug.jpg', 'sep.jpg', 'oct.jpg', 'nov.jpg', 'dec.jpg'];
+  var YEAR = 2027;
+  var COUNT = MONTHS.length;
+
+  var stage = document.getElementById('cal3d-stage');
+  var book = document.getElementById('cal3d-book');
+  var label = document.getElementById('cal3d-label');
+  var prev = document.getElementById('cal3d-prev');
+  var next = document.getElementById('cal3d-next');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var leaves = [];
+  var idx = 0; // number of leaves turned over; the right-hand page shows month idx
+
+  function gridHTML(m) {
+    var first = (new Date(YEAR, m, 1).getDay() + 6) % 7; // Monday start
+    var days = new Date(YEAR, m + 1, 0).getDate();
+    var html = '<div class="cal-grid">';
+    ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(function (d) { html += '<span>' + d + '</span>'; });
+    for (var i = 0; i < first; i++) html += '<i></i>';
+    for (var d = 1; d <= days; d++) html += '<i>' + d + '</i>';
+    return html + '</div>';
+  }
+
+  function build() {
+    book.innerHTML = '';
+    for (var k = 0; k < COUNT; k++) {
+      var leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.innerHTML =
+        '<div class="face front"><img src="images/web/' + PHOTOS[k] + '" alt="' + MONTHS[k] + ' ' + YEAR + ' photograph">' +
+        '<div class="month-overlay"><h3>' + MONTHS[k] + ' ' + YEAR + '</h3>' + gridHTML(k) + '</div></div>' +
+        '<div class="face back"></div>';
+      book.appendChild(leaf);
+      leaves.push(leaf);
+    }
+    render();
+  }
+
+  function render() {
+    leaves.forEach(function (leaf, k) {
+      var turned = k < idx;
+      leaf.classList.toggle('turned', turned);
+      // Small depth offsets keep the leaves from flickering where they overlap
+      leaf.style.transform = turned
+        ? 'translateZ(' + (k * 0.5) + 'px) rotateX(-180deg)'
+        : 'translateZ(' + ((COUNT - k) * 0.5) + 'px)';
+    });
+    label.textContent = MONTHS[idx] + ' ' + YEAR;
+    prev.disabled = idx === 0;
+    next.disabled = idx === COUNT - 1;
+  }
+
+  function go(step) {
+    idx = Math.max(0, Math.min(COUNT - 1, idx + step));
+    render();
+  }
+
+  prev.addEventListener('click', function () { go(-1); });
+  next.addEventListener('click', function () { go(1); });
+
+  // Tap or click the left half to go back, the right half to go forward
+  stage.addEventListener('click', function (e) {
+    var r = stage.getBoundingClientRect();
+    go(e.clientX > r.left + r.width / 2 ? 1 : -1);
+  });
+
+  // The book tilts toward the cursor
+  if (!reduceMotion) {
+    // Update at most once per frame so fast mouse movement doesn't cause lag
+    var frame = null;
+    stage.addEventListener('mousemove', function (e) {
+      if (frame) return;
+      var clientX = e.clientX;
+      var clientY = e.clientY;
+      frame = requestAnimationFrame(function () {
+        frame = null;
+        var r = stage.getBoundingClientRect();
+        var x = (clientX - r.left) / r.width - 0.5;
+        var y = (clientY - r.top) / r.height - 0.5;
+        book.style.transform = 'rotateX(' + (6 - y * 12) + 'deg) rotateY(' + (-8 + x * 16) + 'deg)';
+      });
+    });
+    stage.addEventListener('mouseleave', function () {
+      if (frame) cancelAnimationFrame(frame);
+      frame = null;
+      book.style.transform = '';
+    });
+  }
+
+  build();
+})();
+</script>
+<script>
+// Loader: waits for the page and the heavy photos, with a minimum display time and a timeout
+(function () {
+  var loader = document.getElementById('loader');
+  var root = document.documentElement;
+  root.classList.add('loading');
+
+  var heavy = ['images/web/sunrise.jpeg', 'images/web/cover.jpg', 'images/web/about.jpg',
+    'images/web/jan.jpg', 'images/web/feb.jpg', 'images/web/mar.jpg', 'images/web/apr.jpg', 'images/web/may.jpg', 'images/web/jun.jpg',
+    'images/web/jul.jpg', 'images/web/aug.jpg', 'images/web/sep.jpg', 'images/web/oct.jpg', 'images/web/nov.jpg', 'images/web/dec.jpg'];
+
+  function preload(src) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = img.onerror = resolve; // a missing photo should not hold the page
+      img.src = src;
+    });
+  }
+
+  function pageLoaded() {
+    if (document.readyState === 'complete') return Promise.resolve();
+    return new Promise(function (resolve) { window.addEventListener('load', resolve); });
+  }
+
+  var minimum = new Promise(function (resolve) { setTimeout(resolve, 1200); });
+  var photos = Promise.all(heavy.map(preload));
+  var timeout = new Promise(function (resolve) { setTimeout(resolve, 8000); }); // never block for long
+
+  Promise.race([Promise.all([pageLoaded(), photos, minimum]), timeout]).then(function () {
+    loader.classList.add('done');
+    root.classList.remove('loading');
+    setTimeout(function () { loader.remove(); }, 700);
+  });
+})();
+</script>
 </body></html>
