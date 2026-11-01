@@ -361,7 +361,7 @@ footer {
 <header class="site-head">
   <div class="wrap">
     <nav>
-      <a class="logo" href="#">Life in the Wild<span> By Deepak Yadav</span></a>
+      <a class="logo" href="#">Deepak Yadav Photography</span></a>
       <div class="links">
         <a href="#gallery">Gallery</a>
         <!-- <a href="#species">Species</a> -->
@@ -529,14 +529,15 @@ footer {
   // To replace a photo, save the new image with the same file name in images/.
   // Portrait or landscape is detected from the image itself, so no size setting is needed.
   var PHOTOS = [
-    { file: 'bengal-tiger.jpeg', alt: 'Bengal tiger in golden light, Ranthambore', title: 'Bengal tiger', place: 'Ranthambore · Golden hour', category: 'mammals' },
-    { file: 'squirrel.jpeg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Painted stork', place: 'Bharatpur · Monsoon', category: 'mammals' },
-    { file: 'drongo.jpeg', alt: 'Sloth bear foraging in dry forest, Satpura', title: 'Sloth bear', place: 'Satpura · Dry season', category: 'birds' },
-    { file: 'dog_tail.jpeg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Indian roller', place: 'Velavadar · Mid-morning', category: 'Golden Hour' },
-    { file: 'cormorant.jpeg', alt: 'Asian elephant in morning mist, Nagarhole', title: 'Asian elephant', place: 'Nagarhole · Dawn mist', category: 'birds' },
-    { file: 'owl.jpeg', alt: 'Forest landscape at first light, Pench', title: 'Pench at first light', place: 'Pench · Landscape', category: 'birds' },
-    { file: 'sunrise.jpeg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'Golden Hour' },
-    { file: 'squirrel_jump.jpeg', alt: 'Indian peafowl in courtship display, Gir', title: 'Indian peafowl', place: 'Gir · Courtship display', category: 'mammals' }
+    { file: 'bengal-tiger.jpeg', alt: 'Bengal Tiger', title: 'Head on With Bengal tiger', place: 'Panna', category: 'mammals' },
+    { file: 'black_stilt.jpeg', alt: 'Painted stork in flight over wetlands, Bharatpur', title: 'Morning Grooming', place: 'Sambhar', category: 'Golden Hour' },
+    { file: 'drongo.jpeg', alt: 'Drongo', title: 'Drongo amidst morning light', place: 'Mohdinpur', category: 'birds' },
+    { file: 'dog_tail.jpeg', alt: 'Indian roller perched on a dry branch, Velavadar', title: 'Golden Tail', place: 'Mohdinpur', category: 'Golden Hour' },
+    { file: 'darter.jpeg', alt: 'Darter with its catch', title: 'Darter with its catch', place: 'Bharatpur', category: 'birds' },
+    { file: 'owl.jpeg', alt: 'Owlet at Golden Hour', title: 'Owlet at Golden Hour', place: 'Nathera', category: 'birds' },
+    { file: 'lioness.jpeg', alt: 'Reunion', title: 'Reunion', place: 'Gir', category: 'mammals' },
+    { file: 'squirrel_jump.jpeg', alt: 'r', title: 'In the Air', place: 'Mohdinpur', category: 'mammals' },
+    { file: 'duck_fam.jpeg', alt: 'duck family on morning stroll', title: 'Duck Family out for Morning Stroll', place: 'Nathera', category: 'birds' }
 
   ];
 
@@ -676,8 +677,8 @@ footer {
 (function () {
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   // Sample photos until the real calendar pages are added
-  var PHOTOS = ['jan.jpg', 'feb.jpg', 'mar.jpg', 'apr.jpg', 'may.jpg', 'jun.jpg',
-    'jul.jpg', 'aug.jpg', 'sep.jpg', 'oct.jpg', 'nov.jpg', 'dec.jpg'];
+  var PHOTOS = ['jan.jpeg', 'feb.jpeg', 'mar.jpeg', 'apr.jpeg', 'may.jpeg', 'jun.jpeg',
+    'jul.jpeg', 'aug.jpeg', 'sep.jpeg', 'oct.jpeg', 'nov.jpeg', 'dec.jpeg'];
   var YEAR = 2027;
   var COUNT = MONTHS.length;
 
@@ -776,7 +777,7 @@ footer {
   var root = document.documentElement;
   root.classList.add('loading');
 
-  var heavy = ['images/web/sunrise.jpeg', 'images/web/cover.jpg', 'images/web/about.jpg',
+  var heavy = [
     'images/web/jan.jpg', 'images/web/feb.jpg', 'images/web/mar.jpg', 'images/web/apr.jpg', 'images/web/may.jpg', 'images/web/jun.jpg',
     'images/web/jul.jpg', 'images/web/aug.jpg', 'images/web/sep.jpg', 'images/web/oct.jpg', 'images/web/nov.jpg', 'images/web/dec.jpg'];
 
